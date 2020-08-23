@@ -1,0 +1,12 @@
+{
+    "bot_key": "NTk2MjYyMTIxNzM0NDA2MTQ3.XR2-Xw.RqVDW-edVmEDyhOGQtOpAuOfyq8",
+    "bot_prefix": "s!",
+    "dc_server": "416678821920505870",
+    "debug_messages": "False",
+    "status_message": "<prefix>help ~ by LordSimpson",
+    "enable_team_push": "True",
+    "team_push_channel_id": "746400414785863751",
+    "team_push_notification": "<user> joined channel <channel>\n<@&746417241695977523>",
+    "enable_join_notification": "True",
+    "join_notification": "Hi <user>!\nWelcome to cuberhills.net!"
+}
