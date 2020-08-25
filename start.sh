@@ -1,1 +1,1 @@
-python3 main.py
+screen -S bot ./start_bot.sh 
