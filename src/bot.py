@@ -22,10 +22,24 @@ class Bot:
 
         @self._client.event
         async def on_message(message):
-            if message.content.startswith(f"{self._prefix}ping"):
-                await message.channel.send(self._commands.read_config_file("ping"))
-            if message.content.startswith(f"{self._prefix}help"):
-                await message.channel.send(self._commands.read_config_file("help"))
+            errorOccurred = False
+            errorCommand = "An Error occurred."
+            errorType = "Generic"
+            if message.content.startswith(f"{self._prefix}"):
+                commands = self._commands.get_whole_file()
+                inputMessage = str.split(str(message.content))
+                inputMessage = str.replace(inputMessage[0], self._prefix, "")
+                try:
+                    if commands[inputMessage] is not None:
+                        await message.channel.send(commands[inputMessage])
+                    print(f"[Commands] {message.author} used command '{inputMessage}'")
+                except Exception:
+                    errorOccurred = True
+                    errorCommand = f"Command '{inputMessage}' not found!"
+                    errorType = "Command"
+            if errorOccurred:
+                await message.channel.send(errorCommand)
+                print(f"[{errorType}] {errorCommand}")
 
         if self._config.read_config_file("enable_join_notification") == "True":
             @self._client.event
