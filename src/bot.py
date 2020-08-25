@@ -32,7 +32,7 @@ class Bot:
                 try:
                     if commands[inputMessage] is not None:
                         await message.channel.send(commands[inputMessage])
-                    print(f"[Commands] {message.author} used command '{inputMessage}'")
+                        print(f"[Commands] {message.author} used command '{inputMessage}'")
                 except Exception:
                     errorOccurred = True
                     errorCommand = f"Command '{inputMessage}' not found!"
