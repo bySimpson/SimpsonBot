@@ -31,7 +31,12 @@ class Bot:
                 inputMessage = str.replace(inputMessage[0], self._prefix, "")
                 try:
                     if commands[inputMessage] is not None:
-                        await message.channel.send(commands[inputMessage])
+                        if "<embed>" in commands[inputMessage]:
+                            output = str.replace(commands[inputMessage], "<embed>", "")
+                            embed = discord.Embed(description=output, color=0xb87328)
+                            await message.channel.send(embed=embed)
+                        else:
+                            await message.channel.send(commands[inputMessage])
                         print(f"[Commands] {message.author} used command '{inputMessage}'")
                 except Exception:
                     errorOccurred = True
