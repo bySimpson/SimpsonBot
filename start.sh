@@ -1,1 +1,1 @@
-screen -S bot ./start_bot.sh 
+screen -d -S bot -m ./start_bot.sh 
