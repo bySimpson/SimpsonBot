@@ -1,4 +1,5 @@
 {
     "help": "<embed>Commands:\n\t- Use 'spacemychannel' to space your channel! [TODO]",
-    "ping": "Pong!"
+    "ping": "Pong!",
+    "credits": "made by LordSimpson"
 }
