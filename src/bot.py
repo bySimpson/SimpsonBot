@@ -1,6 +1,8 @@
 from src.db import Config
 import discord
 import asyncio
+import time
+from datetime import datetime
 
 
 class Bot:
@@ -18,7 +20,7 @@ class Bot:
             presence = self._config.read_config_file("status_message")
             presence = str.replace(presence, "<prefix>", self._prefix)
             await self._client.change_presence(activity=discord.Game(name=presence))
-            print('[Status] We have logged in as {0.user}'.format(self._client))
+            self.print_log('[Status] We have logged in as {0.user}'.format(self._client))
 
         @self._client.event
         async def on_message(message):
@@ -37,14 +39,14 @@ class Bot:
                             await message.channel.send(embed=embed)
                         else:
                             await message.channel.send(commands[inputMessage])
-                        print(f"[Commands] {message.author} used command '{inputMessage}'")
+                        self.print_log(f"[Commands] {message.author} used command '{inputMessage}'")
                 except Exception:
                     errorOccurred = True
                     errorCommand = f"Command '{inputMessage}' not found!"
                     errorType = "Command"
             if errorOccurred:
                 await message.channel.send(errorCommand)
-                print(f"[{errorType}] {errorCommand}")
+                self.print_log(f"[{errorType}] {errorCommand}")
 
         if self._config.read_config_file("enable_join_notification") == "True":
             @self._client.event
@@ -56,6 +58,14 @@ class Bot:
     async def add_role(self, user, role):
         await user.add_roles(role, reason=f"Linked account with {str(user)}")
 
+    def get_current_time(self):
+        now = datetime.now()
+        output_time = '{0:%H:%M:%S}'.format(now)
+        return output_time
+
     async def remove_role(self, user, role):
         await user.remove_roles(role, reason=f"Unlinked account with {str(user)}")
 
+    def print_log(self, message):
+        time = self.get_current_time()
+        print(f"[{time}] {message}")
