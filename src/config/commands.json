@@ -1,5 +1,8 @@
 {
-    "help": "<embed>Commands:\n\t- Use 'spacemychannel' to space your channel! [TODO]",
+    "help": "<embed>Commands:\n\t- Use 'spacemychannel' to space your channel! [TODO]\n\t- Use 'tobi' to ping tobi!\n\t- Use 'thomas' to ping thomas!\n\t- Use 'jesse' to ping jesse!",
     "ping": "Pong!",
-    "credits": "made by LordSimpson"
+    "credits": "made by LordSimpson",
+    "tobi": "<@515200582563135508>",
+    "thomas": "<@502495128758517770>",
+    "jesse": "<@177399831650762753>"
 }
