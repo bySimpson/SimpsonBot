@@ -1,1 +1,4 @@
-screen -d -S bot -m ./start_bot.sh 
+#!/bin/sh
+cd /opt/git/simpsonbot
+/usr/bin/screen -dm -S bot -m "/opt/git/simpsonbot/start_bot.sh"
+
