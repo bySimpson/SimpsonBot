@@ -4,9 +4,9 @@
     "dc_server": "416678821920505870",
     "debug_messages": "False",
     "status_message": "<prefix>help ~ by LordSimpson",
-    "enable_team_push": "True",
+    "enable_team_push": "False",
     "team_push_channel_id": "746400414785863751",
     "team_push_notification": "<user> joined channel <channel>\n<@&746417241695977523>",
-    "enable_join_notification": "True",
+    "enable_join_notification": "False",
     "join_notification": "Hi <user>!\nWelcome to cuberhills.net!"
 }
