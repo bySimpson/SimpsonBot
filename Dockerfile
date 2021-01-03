@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3-alpine
 ENV PYTHONUNBUFFERED definitely
 WORKDIR /usr/src/app
 
