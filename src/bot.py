@@ -39,6 +39,42 @@ class Bot:
                         await message.channel.send(embed=embed)
                     else:
                         await message.channel.send(f"{message.author.mention} you are not allowed to use that command!")
+                elif message.content.startswith(f"{self._prefix}clear"):
+                    if await self.is_admin(message.author):
+                        msg = message.content
+                        msg = str.replace(msg, "  ", " ")
+                        msg = str.split(msg, " ")
+                        if len(msg) == 2:
+                            try:
+                                await message.channel.purge(limit=int(msg[1]))
+                                delmsg = await message.channel.send(f"Cleared last {msg[1]} messages!")
+                                await asyncio.sleep(3)
+                                await delmsg.delete()
+                            except Exception:
+                                pass
+                        elif len(msg) == 3:
+                            try:
+                                identifier = msg[2]
+                                identifier = str.replace(identifier, f" ", "")
+                                identifier = str.replace(identifier, f"<", "")
+                                identifier = str.replace(identifier, f">", "")
+                                identifier = str.replace(identifier, f"@", "")
+                                identifier = str.replace(identifier, f"!", "")
+                                cuser = self._client.get_user(int(identifier))
+                                await message.channel.purge(limit=int(msg[1]), check = lambda m: m.author.id == cuser.id)
+                                delmsg = await message.channel.send(f"Cleared last {msg[1]} messages!")
+                                await asyncio.sleep(3)
+                                await delmsg.delete()
+                            except Exception:
+                                pass
+                        else:
+                            errorType = "Clear"
+                            errorCommand = f"Please use {self._prefix}clear amount [@user]"
+                            errorOccurred = True
+                    else:
+                        errorType = "Permissions"
+                        errorCommand = f"You are not allowed to use this command!"
+                        errorOccurred = True
                 elif message.content.startswith(f"{self._prefix}poke"):
                     if await self.is_user(message.author):
                         msg = message.content
@@ -79,7 +115,7 @@ class Bot:
                         errorType = "Permissions"
                         errorCommand = f"You are not allowed to use this command!"
                         errorOccurred = True
-                    
+
                     
                     
                 else: # use commands.json
@@ -126,13 +162,10 @@ class Bot:
         admins = Config("./src/config/admins.json").get_whole_file()
         users = Config("./src/config/users.json").get_whole_file()
         if str(user.id) in admins.values():
-            print("0")
             return True
         elif str(user.id) in users.values():
-            print("1")
             return True
         else:
-            print("2")
             return False
 
     async def remove_role(self, user, role):
