@@ -76,6 +76,7 @@ class Bot:
                         errorCommand = f"You are not allowed to use this command!"
                         errorOccurred = True
                 elif message.content.startswith(f"{self._prefix}poke"):
+                    self._stop = False
                     if await self.is_user(message.author):
                         msg = message.content
                         msg = str.replace(msg, "  ", " ")
