@@ -69,7 +69,7 @@ class Bot:
                                 pass
                         else:
                             errorType = "Clear"
-                            errorCommand = f"Please use {self._prefix}clear amount [@user]"
+                            errorCommand = f"{message.author.mention} try to use {self._prefix}clear amount [@user]"
                             errorOccurred = True
                     else:
                         errorType = "Permissions"
@@ -116,8 +116,8 @@ class Bot:
                         errorCommand = f"You are not allowed to use this command!"
                         errorOccurred = True
 
-                    
-                    
+
+
                 else: # use commands.json
                     try:
                         if commands[inputMessage] is not None:
@@ -127,14 +127,15 @@ class Bot:
                                 await message.channel.send(embed=embed)
                             else:
                                 await message.channel.send(commands[inputMessage])
-                            self.print_log(f"[Commands] {message.author} used command '{inputMessage}'")
                     except Exception:
                         errorOccurred = True
                         errorCommand = f"Command '{inputMessage}' not found!"
                         errorType = "Command"
+                if not errorOccurred:
+                    self.print_log(f"[Commands] {message.author} used command '{inputMessage}'")
             if errorOccurred:
                 await message.channel.send(errorCommand)
-                self.print_log(f"[{errorType}] {errorCommand}")
+                self.print_log(f"[{errorType}] [{message.author}] {errorCommand}")
 
         if self._config.read_config_file("enable_join_notification") == "True":
             @self._client.event
