@@ -4,7 +4,6 @@ import asyncio
 import time
 from datetime import datetime
 
-
 class Bot:
     def __init__(self, token, prefix="."):
         self._config = Config()
@@ -12,6 +11,7 @@ class Bot:
         self._client = discord.Client()
         self._prefix = prefix
         self.event_loader()
+        self._stop = False
         self._client.run(token)
 
     def event_loader(self):
@@ -28,22 +28,74 @@ class Bot:
             errorCommand = "An Error occurred."
             errorType = "Generic"
             if message.content.startswith(f"{self._prefix}"):
+                await message.delete()
                 commands = self._commands.get_whole_file()
                 inputMessage = str.split(str(message.content))
                 inputMessage = str.replace(inputMessage[0], self._prefix, "")
-                try:
-                    if commands[inputMessage] is not None:
-                        if "<embed>" in commands[inputMessage]:
-                            output = str.replace(commands[inputMessage], "<embed>", "")
-                            embed = discord.Embed(description=output, color=0xb87328)
-                            await message.channel.send(embed=embed)
+                if message.content.startswith(f"{self._prefix}stop"):
+                    if await self.is_user(message.author):
+                        self._stop = True
+                        embed = discord.Embed(description="Stopped mentioning!", color=0xb87328, title="Mention")
+                        await message.channel.send(embed=embed)
+                    else:
+                        await message.channel.send(f"{message.author.mention} you are not allowed to use that command!")
+                elif message.content.startswith(f"{self._prefix}poke"):
+                    if await self.is_user(message.author):
+                        msg = message.content
+                        msg = str.replace(msg, "  ", " ")
+                        msg = str.split(msg, " ")
+                        if len(msg) != 1:
+                            identifier = msg[1]
+                            identifier = str.replace(identifier, f" ", "")
+                            identifier = str.replace(identifier, f"<", "")
+                            identifier = str.replace(identifier, f">", "")
+                            identifier = str.replace(identifier, f"@", "")
+                            identifier = str.replace(identifier, f"!", "")
+                            try:
+                                user = self._client.get_user(int(identifier))
+                                if len(msg) == 3:
+                                    for i in range(0, int(msg[2])):
+                                        if self._stop:
+                                            self._stop = False
+                                            break
+                                        await message.channel.send(user.mention)
+                                        await asyncio.sleep(1)
+                                elif len(msg) == 2:
+                                    await message.channel.send(user.mention)
+                                else:
+                                    errorType = "Poke"
+                                    errorCommand = f"Please use {self._prefix}poke @user [amount]"
+                                    errorOccurred = True
+                            except Exception as ex:
+                                print(ex)
+                                errorType = "Poke"
+                                errorCommand = f"Please use {self._prefix}poke @user [amount]"
+                                errorOccurred = True
                         else:
-                            await message.channel.send(commands[inputMessage])
-                        self.print_log(f"[Commands] {message.author} used command '{inputMessage}'")
-                except Exception:
-                    errorOccurred = True
-                    errorCommand = f"Command '{inputMessage}' not found!"
-                    errorType = "Command"
+                            errorType = "Poke"
+                            errorCommand = f"Please use {self._prefix}poke @user [amount]"
+                            errorOccurred = True
+                    else:
+                        errorType = "Permissions"
+                        errorCommand = f"You are not allowed to use this command!"
+                        errorOccurred = True
+                    
+                    
+                    
+                else: # use commands.json
+                    try:
+                        if commands[inputMessage] is not None:
+                            if "<embed>" in commands[inputMessage]:
+                                output = str.replace(commands[inputMessage], "<embed>", "")
+                                embed = discord.Embed(description=output, color=0xb87328)
+                                await message.channel.send(embed=embed)
+                            else:
+                                await message.channel.send(commands[inputMessage])
+                            self.print_log(f"[Commands] {message.author} used command '{inputMessage}'")
+                    except Exception:
+                        errorOccurred = True
+                        errorCommand = f"Command '{inputMessage}' not found!"
+                        errorType = "Command"
             if errorOccurred:
                 await message.channel.send(errorCommand)
                 self.print_log(f"[{errorType}] {errorCommand}")
@@ -62,6 +114,26 @@ class Bot:
         now = datetime.now()
         output_time = '{0:%H:%M:%S}'.format(now)
         return output_time
+
+    async def is_admin(self, user):
+        admins = Config("./src/config/admins.json").get_whole_file()
+        if str(user.id) in admins.values():
+            return True
+        else:
+            return False
+
+    async def is_user(self, user):
+        admins = Config("./src/config/admins.json").get_whole_file()
+        users = Config("./src/config/users.json").get_whole_file()
+        if str(user.id) in admins.values():
+            print("0")
+            return True
+        elif str(user.id) in users.values():
+            print("1")
+            return True
+        else:
+            print("2")
+            return False
 
     async def remove_role(self, user, role):
         await user.remove_roles(role, reason=f"Unlinked account with {str(user)}")
