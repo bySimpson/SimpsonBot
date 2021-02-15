@@ -142,10 +142,9 @@ class Bot:
                         msg = str.split(msg, " ")
                         if len(msg) == 2:
                             try:
-                                await message.channel.purge(limit=int(msg[1]))
-                                delmsg = await message.channel.send(f"Cleared last {msg[1]} messages!")
-                                await asyncio.sleep(5)
-                                await delmsg.delete()
+                                loop = asyncio.get_event_loop()
+                                x = threading.Thread(target=asyncio.run_coroutine_threadsafe, args=(self.purge_messages(message, int(msg[1])), loop,))
+                                x.start()
                             except Exception:
                                 pass
                         elif len(msg) == 3:
@@ -157,10 +156,10 @@ class Bot:
                                 identifier = str.replace(identifier, f"@", "")
                                 identifier = str.replace(identifier, f"!", "")
                                 cuser = self._client.get_user(int(identifier))
-                                await message.channel.purge(limit=int(msg[1]), check=lambda m: m.author.id == cuser.id)
-                                delmsg = await message.channel.send(f"Cleared last {msg[1]} messages!")
-                                await asyncio.sleep(5)
-                                await delmsg.delete()
+                                loop = asyncio.get_event_loop()
+                                # await message.channel.purge(limit=int(msg[1]), check=lambda m: m.author.id == cuser.id)
+                                thread = threading.Thread(target=asyncio.run_coroutine_threadsafe, args=(self.purge_messages(message, int(msg[1]), cuser), loop,))
+                                thread.start()
                             except Exception:
                                 pass
                         else:
@@ -305,3 +304,16 @@ class Bot:
         except Exception as ex:
             print(ex)
             return False
+
+    async def purge_messages(self, message, amount, user=None):
+        if amount > 20:
+            delmsg = await message.channel.send(f"Clearing {amount} messages! This might take a while...")
+            await asyncio.sleep(3)
+            await delmsg.delete()
+        if not user:
+            await message.channel.purge(limit=amount)
+        else:
+            await message.channel.purge(limit=int(amount), check=lambda m: m.author.id == user.id)
+        delmsg2 = await message.channel.send(f"Cleared last {amount} messages!")
+        await asyncio.sleep(10)
+        await delmsg2.delete()
