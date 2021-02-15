@@ -6,5 +6,6 @@
     "status_message": "<prefix>help ~ by LordSimpson",
     "enable_join_notification": "False",
     "join_notification": "Hello!",
-    "user_role": "SBUser"
+    "user_role": "SBUser",
+    "mute_role": "SBMute"
 }

@@ -4,6 +4,7 @@ import asyncio
 import time
 from datetime import datetime
 from discord.utils import get
+import threading
 
 
 class Bot:
@@ -40,15 +41,96 @@ class Bot:
                         embed = discord.Embed(description="Stopped mentioning!", color=0xb87328, title="Mention")
                         await message.channel.send(embed=embed)
                     else:
-                        await message.channel.send(f"{message.author.mention} you are not allowed to use that command!")
+                        errorType = "Permissions"
+                        errorCommand = f"You are not allowed to use this command!"
+                        errorOccurred = True
                 elif message.content.startswith(f"{self._prefix}setup"):
                     if await self.is_admin(message.author):
                         if await self.check_role(message.author, self._config.read_config_file("user_role")):
-                            pass
                             await message.channel.send("Already configured!")
                         else:
                             await message.author.guild.create_role(name=self._config.read_config_file("user_role"))
                             await message.channel.send(f"Added role {self._config.read_config_file('user_role')} to server!")
+                elif message.content.startswith(f"{self._prefix}unmute"):
+                    if await self.is_admin(message.author, check_file=False):
+                        msg = message.content
+                        msg = str.replace(msg, "  ", " ")
+                        msg = str.split(msg, " ")
+                        if len(msg) == 2:
+                            try:
+                                identifier = msg[1]
+                                identifier = str.replace(identifier, f" ", "")
+                                identifier = str.replace(identifier, f"<", "")
+                                identifier = str.replace(identifier, f">", "")
+                                identifier = str.replace(identifier, f"@", "")
+                                identifier = str.replace(identifier, f"!", "")
+                                user = self._client.get_user(int(identifier))
+                                role = get(message.author.guild.roles, name=self._config.read_config_file("mute_role"))
+                                member = message.author.guild.get_member(int(identifier))
+                                try:
+                                    await member.edit(mute=False)
+                                except Exception:
+                                    pass
+                                await member.remove_roles(role)
+                                delmsg = await message.channel.send(f"Successfully unmuted {user.mention}!")
+                                await asyncio.sleep(5)
+                                await delmsg.delete()
+                            except Exception as ex:
+                                print(ex)
+                                errorType = "Error"
+                                errorCommand = f"Something went wrong!"
+                                errorOccurred = True
+                        else:
+                            errorType = "Unute"
+                            errorCommand = f"{message.author.mention} try to use {self._prefix}unmute @user"
+                            errorOccurred = True
+                elif message.content.startswith(f"{self._prefix}mute"):
+                    #await message.channel.send("mute!")
+                    if await self.is_admin(message.author, check_file=False):
+                        loop = asyncio.get_event_loop()
+                        x = threading.Thread(target=asyncio.run_coroutine_threadsafe, args=(self.check_mute_role_channels(message.author),loop,))
+                        x.start()
+                        #await self.check_mute_role_channels(message.author)
+                        msg = message.content
+                        msg = str.replace(msg, "  ", " ")
+                        msg = str.split(msg, " ")
+                        if len(msg) == 2:
+                            try:
+                                identifier = msg[1]
+                                identifier = str.replace(identifier, f" ", "")
+                                identifier = str.replace(identifier, f"<", "")
+                                identifier = str.replace(identifier, f">", "")
+                                identifier = str.replace(identifier, f"@", "")
+                                identifier = str.replace(identifier, f"!", "")
+                                user = self._client.get_user(int(identifier))
+                                if not message.author == user:
+                                    role = get(message.author.guild.roles, name=self._config.read_config_file("mute_role"))
+                                    member = message.author.guild.get_member(int(identifier))
+                                    try:
+                                        await member.edit(mute=True)
+                                    except Exception:
+                                        pass
+                                    await member.add_roles(role)
+                                    delmsg = await message.channel.send(f"Successfully muted {user.mention}!")
+                                    await asyncio.sleep(5)
+                                    await delmsg.delete()
+                                else:
+                                    errorType = "Mute"
+                                    errorCommand = f"You cannot mute yourself!"
+                                    errorOccurred = True
+                            except Exception as ex:
+                                print(ex)
+                                errorType = "Error"
+                                errorCommand = f"Something went wrong!"
+                                errorOccurred = True
+                        else:
+                            errorType = "Mute"
+                            errorCommand = f"{message.author.mention} try to use {self._prefix}mute @user"
+                            errorOccurred = True
+                    else:
+                        errorType = "Permissions"
+                        errorCommand = f"You are not allowed to use this command!"
+                        errorOccurred = True
                 elif message.content.startswith(f"{self._prefix}clear"):
                     if await self.is_admin(message.author):
                         msg = message.content
@@ -163,9 +245,9 @@ class Bot:
         output_time = '{0:%H:%M:%S}'.format(now)
         return output_time
 
-    async def is_admin(self, user, check_server=True):
+    async def is_admin(self, user, check_server=True, check_file=True):
         admins = Config("./src/config/admins.json").get_whole_file()
-        if str(user.id) in admins.values():
+        if str(user.id) in admins.values() and check_file:
             return True
         elif check_server and user.guild_permissions.administrator:
             return True
@@ -205,3 +287,15 @@ class Bot:
     def print_log(self, message):
         time = self.get_current_time()
         print(f"[{time}] {message}")
+
+    async def check_mute_role_channels(self, user):
+        try:
+            if not get(user.guild.roles, name=self._config.read_config_file("mute_role")):
+                await user.guild.create_role(name=self._config.read_config_file("mute_role"))
+            for channel in user.guild.channels:
+                role = get(user.guild.roles, name=self._config.read_config_file("mute_role"))
+                await channel.set_permissions(role, send_messages=False, speak=False)
+            return True
+        except Exception as ex:
+            print(ex)
+            return False

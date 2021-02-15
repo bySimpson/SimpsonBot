@@ -1,5 +1,5 @@
 {
-    "help": "<embed>Commands:\n\t- Use 'clear' to clear the channel!\n\t- Use 'poke' to poke someone!\n\t- Use 'tobi' to ping tobi!\n\t- Use 'thomas' to ping thomas!\n\t- Use 'jesse' to ping jesse!",
+    "help": "<embed>Commands:\n\t- Use 'setup' to setup the bot!\n\t- Use 'mute' to mute someone!\n\t- Use 'clear' to clear the channel!\n\t- Use 'poke' to poke someone!\n\t- Use 'tobi' to ping tobi!\n\t- Use 'thomas' to ping thomas!\n\t- Use 'jesse' to ping jesse!",
     "ping": "Pong!",
     "credits": "made by LordSimpson",
     "tobi": "<@515200582563135508>",
