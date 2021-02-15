@@ -227,7 +227,9 @@ class Bot:
                 if not errorOccurred:
                     self.print_log(f"[Commands] {message.author} used command '{inputMessage}'")
             if errorOccurred:
-                await message.channel.send(errorCommand)
+                delmsg = await message.channel.send(errorCommand)
+                await asyncio.sleep(15)
+                await delmsg.delete()
                 self.print_log(f"[{errorType}] [{message.author}] {errorCommand}")
 
         if self._config.read_config_file("enable_join_notification") == "True":
