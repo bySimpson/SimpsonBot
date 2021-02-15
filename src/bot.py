@@ -38,8 +38,10 @@ class Bot:
                 if message.content.startswith(f"{self._prefix}stop"):
                     if await self.is_user(message.author):
                         self._stop = True
-                        embed = discord.Embed(description="Stopped mentioning!", color=0xb87328, title="Mention")
-                        await message.channel.send(embed=embed)
+                        embed = discord.Embed(description="Stopped mentioning!", color=0xb87328)
+                        delmsg = await message.channel.send(embed=embed)
+                        await asyncio.sleep(5)
+                        await delmsg.delete()
                     else:
                         errorType = "Permissions"
                         errorCommand = f"You are not allowed to use this command!"
