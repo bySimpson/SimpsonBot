@@ -4,6 +4,7 @@ import asyncio
 import time
 from datetime import datetime
 
+
 class Bot:
     def __init__(self, token, prefix="."):
         self._config = Config()
@@ -48,7 +49,7 @@ class Bot:
                             try:
                                 await message.channel.purge(limit=int(msg[1]))
                                 delmsg = await message.channel.send(f"Cleared last {msg[1]} messages!")
-                                await asyncio.sleep(3)
+                                await asyncio.sleep(5)
                                 await delmsg.delete()
                             except Exception:
                                 pass
@@ -61,9 +62,9 @@ class Bot:
                                 identifier = str.replace(identifier, f"@", "")
                                 identifier = str.replace(identifier, f"!", "")
                                 cuser = self._client.get_user(int(identifier))
-                                await message.channel.purge(limit=int(msg[1]), check = lambda m: m.author.id == cuser.id)
+                                await message.channel.purge(limit=int(msg[1]), check=lambda m: m.author.id == cuser.id)
                                 delmsg = await message.channel.send(f"Cleared last {msg[1]} messages!")
-                                await asyncio.sleep(3)
+                                await asyncio.sleep(5)
                                 await delmsg.delete()
                             except Exception:
                                 pass
@@ -119,7 +120,7 @@ class Bot:
 
 
 
-                else: # use commands.json
+                else:  # use commands.json
                     try:
                         if commands[inputMessage] is not None:
                             if "<embed>" in commands[inputMessage]:
@@ -153,9 +154,11 @@ class Bot:
         output_time = '{0:%H:%M:%S}'.format(now)
         return output_time
 
-    async def is_admin(self, user):
+    async def is_admin(self, user, check_server=True):
         admins = Config("./src/config/admins.json").get_whole_file()
         if str(user.id) in admins.values():
+            return True
+        elif check_server and user.guild_permissions.administrator:
             return True
         else:
             return False
