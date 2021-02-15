@@ -48,6 +48,7 @@ class Bot:
                     if await self.is_admin(message.author):
                         if await self.check_role(message.author, self._config.read_config_file("user_role")):
                             await message.channel.send("Already configured!")
+                            await self.check_mute_role_channels(message.author)
                         else:
                             await message.author.guild.create_role(name=self._config.read_config_file("user_role"))
                             await message.channel.send(f"Added role {self._config.read_config_file('user_role')} to server!")
