@@ -306,10 +306,6 @@ class Bot:
             return False
 
     async def purge_messages(self, message, amount, user=None):
-        if amount > 20:
-            delmsg = await message.channel.send(f"Clearing {amount} messages! This might take a while...")
-            await asyncio.sleep(3)
-            await delmsg.delete()
         if not user:
             await message.channel.purge(limit=amount)
         else:
