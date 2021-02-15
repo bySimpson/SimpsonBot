@@ -5,5 +5,6 @@
     "debug_messages": "False",
     "status_message": "<prefix>help ~ by LordSimpson",
     "enable_join_notification": "False",
-    "join_notification": "Hello!"
+    "join_notification": "Hello!",
+    "user_role": "SBUser"
 }

@@ -3,6 +3,7 @@ import discord
 import asyncio
 import time
 from datetime import datetime
+from discord.utils import get
 
 
 class Bot:
@@ -40,6 +41,14 @@ class Bot:
                         await message.channel.send(embed=embed)
                     else:
                         await message.channel.send(f"{message.author.mention} you are not allowed to use that command!")
+                elif message.content.startswith(f"{self._prefix}setup"):
+                    if await self.is_admin(message.author):
+                        if await self.check_role(message.author, self._config.read_config_file("user_role")):
+                            pass
+                            await message.channel.send("Already configured!")
+                        else:
+                            await message.author.guild.create_role(name=self._config.read_config_file("user_role"))
+                            await message.channel.send(f"Added role {self._config.read_config_file('user_role')} to server!")
                 elif message.content.startswith(f"{self._prefix}clear"):
                     if await self.is_admin(message.author):
                         msg = message.content
@@ -163,12 +172,29 @@ class Bot:
         else:
             return False
 
-    async def is_user(self, user):
+    async def check_role(self, user, rolename):
+        if get(user.guild.roles, name=rolename):
+            return True
+        else:
+            return False
+
+    async def is_user(self, user, use_role=True):
+        has_role = None
+        try:
+            role = discord.utils.find(lambda r: r.name == self._config.read_config_file("user_role"), user.guild.roles)
+            if role in user.roles:
+                has_role = True
+            else:
+                has_role = False
+        except Exception as ex:
+            has_role = False
         admins = Config("./src/config/admins.json").get_whole_file()
         users = Config("./src/config/users.json").get_whole_file()
         if str(user.id) in admins.values():
             return True
         elif str(user.id) in users.values():
+            return True
+        elif use_role and has_role:
             return True
         else:
             return False
