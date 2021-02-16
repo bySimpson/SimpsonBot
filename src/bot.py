@@ -191,7 +191,7 @@ class Bot:
                                             self._stop = False
                                             break
                                         await message.channel.send(user.mention)
-                                        await asyncio.sleep(1)
+                                        await asyncio.sleep(2)
                                 elif len(msg) == 2:
                                     await message.channel.send(user.mention)
                                 else:
