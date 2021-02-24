@@ -2,7 +2,7 @@
     "help": "<embed>Commands:\n\t- Use 'setup' to setup the bot!\n\t- Use 'mute' to mute someone!\n\t- Use 'clear' to clear the channel!\n\t- Use 'poke' to poke someone!\n\t- Use 'tobi' to ping tobi!\n\t- Use 'thomas' to ping thomas!\n\t- Use 'jesse' to ping jesse!",
     "ping": "Pong!",
     "credits": "made by LordSimpson",
-    "tobi": "<@515200582563135508>",
+    "tobi": "<@515200582563135508>\nGroßes T, kleiner Baumarkt!",
     "thomas": "<@502495128758517770>",
     "jesse": "<@177399831650762753>"
 }
