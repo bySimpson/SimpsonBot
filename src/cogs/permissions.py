@@ -64,8 +64,8 @@ class Permissions(commands.Cog):
         if ctx.author.guild_permissions.administrator or self.db.is_moderator(ctx.guild_id, ctx.author.id):
             if username:
                 embed_ = discord.Embed(title=f"Permissions of {username.name}", color=0xb87328)
-                embed_.add_field(name="Moderator", value=self.db.is_moderator(ctx.guild_id, ctx.author.id))
-                embed_.add_field(name="Administrator", value=self.db.is_admin(ctx.guild_id, ctx.author.id))
+                embed_.add_field(name="Moderator", value=self.db.is_moderator(ctx.guild_id, username.id))
+                embed_.add_field(name="Administrator", value=self.db.is_admin(ctx.guild_id, username.id))
                 # user-specific permissions
                 await ctx.respond(embed=embed_)
             else:
