@@ -1,9 +1,4 @@
-from src.db import Config
-from src.bot import Bot
+from src.bot import start_bot
 
 if __name__ == "__main__":
-    config = Config()
-    botKey = config.read_config_file("bot_key")
-    prefix = config.read_config_file("bot_prefix")
-    if botKey != "":
-        bot = Bot(botKey, prefix=prefix)
+    start_bot()
