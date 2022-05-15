@@ -40,7 +40,7 @@ class Permissions(commands.Cog):
         if ctx.author.guild_permissions.administrator or self.db.is_admin(ctx.guild_id, ctx.author.id):
             user = self.db.update_or_add_user_to_guild(ctx.guild_id, username.id, User(administrator=True))
             if user:
-                await ctx.respond(f"<@{username.id}> is now a Administrator!")
+                await ctx.respond(f"<@{username.id}> is now an Administrator!")
             else:
                 await ctx.respond(f"An error occurred while adding <@{username.id}> to Administrators!")
         else:
@@ -52,7 +52,7 @@ class Permissions(commands.Cog):
         if ctx.author.guild_permissions.administrator or self.db.is_admin(ctx.guild_id, ctx.author.id):
             user = self.db.update_or_add_user_to_guild(ctx.guild_id, username.id, User(administrator=False))
             if user:
-                await ctx.respond(f"<@{username.id}> is no longer a Administrator!")
+                await ctx.respond(f"<@{username.id}> is no longer an Administrator!")
             else:
                 await ctx.respond(f"An error occurred while removing <@{username.id}> from Administrator!")
         else:
