@@ -3,7 +3,8 @@ import os # default module
 from decouple import config
 
 extensions = [
-    "clear"
+    "clear",
+    "duck"
 ]
 
 bot = discord.Bot(debug_guilds=[170834267721564160], intents=discord.Intents.all(),
