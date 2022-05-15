@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3-alpine
 ENV PYTHONUNBUFFERED definitely
 WORKDIR /usr/src/app
 
@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["stdbuf", "-oL", "python", "./main.py"]
+CMD ["python", "./main.py"]
