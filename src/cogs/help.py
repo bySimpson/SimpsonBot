@@ -7,7 +7,7 @@ class Help(commands.Cog):
         self.bot = bot
 
     @discord.slash_command(name="help", description="Get list of all commands with description!")
-    async def clear(self, ctx: discord.commands.context.ApplicationContext):
+    async def help(self, ctx: discord.commands.context.ApplicationContext):
         description_dict = {}
         all_commands = self.bot.all_commands
         for id_ in all_commands:

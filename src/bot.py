@@ -6,7 +6,8 @@ extensions = [
     "clear",
     "duck",
     "mention",
-    "help"
+    "help",
+    "permissions"
 ]
 
 def start_bot():
