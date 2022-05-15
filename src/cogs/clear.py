@@ -9,11 +9,11 @@ class Clear(commands.Cog):
     @discord.slash_command(name="clear", description="Clear a set amount of messages")
     async def clear(self, ctx: discord.commands.context.ApplicationContext,
                     amount: discord.Option(discord.SlashCommandOptionType.integer, "amount", required=True),
-                    user: discord.Option(discord.SlashCommandOptionType.user, "username", required=False)):
+                    username: discord.Option(discord.SlashCommandOptionType.user, "username", required=False)):
         if ctx.author.guild_permissions.administrator:
-            if user:
-                await ctx.channel.purge(limit=amount, check=lambda m: m.author.id == user.id)
-                await ctx.respond(f"Cleared last {amount} messages of {user}!", delete_after=5)
+            if username:
+                await ctx.channel.purge(limit=amount, check=lambda m: m.author.id == username.id)
+                await ctx.respond(f"Cleared last {amount} messages of {username}!", delete_after=5)
             else:
                 await ctx.channel.purge(limit=amount)
                 await ctx.respond(f"Cleared last {amount} messages!", delete_after=5)

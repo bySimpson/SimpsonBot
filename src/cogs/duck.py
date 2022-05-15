@@ -7,7 +7,7 @@ class Duck(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
-    @discord.slash_command(name="duck", description="Send a random duck in chat! (https://random-d.uk/)")
+    @discord.slash_command(name="duck", description="Send a random duck in chat ( https://random-d.uk/ )!")
     async def clear(self, ctx: discord.commands.context.ApplicationContext):
         req = requests.get("https://random-d.uk/api/random")
         if req.status_code == 200:
