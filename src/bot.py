@@ -7,12 +7,14 @@ extensions = [
     "duck",
     "mention",
     "help",
-    "permissions"
+    "permissions",
+    "reddit"
 ]
 
 def start_bot():
 
-    bot = discord.Bot(intents=discord.Intents.all(),
+    bot = discord.Bot( debug_guilds=[170834267721564160],
+                        intents=discord.Intents.all(),
                       activity=discord.Activity(type=discord.ActivityType.playing, name="/help - by LordSimpson"))
 
     for cog in extensions:
