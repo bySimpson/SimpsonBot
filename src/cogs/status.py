@@ -3,11 +3,13 @@ import requests
 from discord.ext import commands, tasks
 import betteruptime
 from decouple import config
+from src.db import DB
 
 
 class Status(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
+        self.db = DB()
         self.update_service_status.start()
         token = config("BETTERUPTIME_TOKEN", default=None)
         if token:
@@ -64,18 +66,21 @@ class Status(commands.Cog):
 
     @discord.slash_command(name="status", description="Get service status of all services!")
     async def service_status(self, ctx: discord.commands.context.ApplicationContext):
-        if self.configured:
-            site_title = self.get_betteruptime_site_title()
-            embed_ = discord.Embed(title=f"{site_title}", color=0xb87328)
-            services = self.get_betteruptime_status()
-            for c_category_name in services:
-                category_list = []
-                for c_service in services[c_category_name]:
-                    category_list.append(f"{c_service['name']}: {c_service['status']}")
-                embed_.add_field(name=f"{c_category_name}", value="\n".join(category_list), inline=False)
-            await ctx.respond(embed=embed_)
+        if ctx.author.guild_permissions.administrator or self.db.is_moderator(ctx.guild_id, ctx.author.id):
+            if self.configured:
+                site_title = self.get_betteruptime_site_title()
+                embed_ = discord.Embed(title=f"{site_title}", color=0xb87328)
+                services = self.get_betteruptime_status()
+                for c_category_name in services:
+                    category_list = []
+                    for c_service in services[c_category_name]:
+                        category_list.append(f"{c_service['name']}: {c_service['status']}")
+                    embed_.add_field(name=f"{c_category_name}", value="\n".join(category_list), inline=False)
+                await ctx.respond(embed=embed_)
+            else:
+                await ctx.respond("BetterUptime integration is not configured correctly!", delete_after=5)
         else:
-            await ctx.respond("BetterUptime integration is not configured correctly!", delete_after=5)
+            await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
 
 
 def setup(bot):
