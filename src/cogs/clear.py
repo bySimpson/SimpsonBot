@@ -9,7 +9,7 @@ class Clear(commands.Cog):
         self.db = DB()
         self.bot = bot
 
-    @discord.slash_command(name="clear", description="Clear a set amount of messages")
+    @discord.slash_command(name="clear", description="Clear a set amount of messages!")
     async def clear(self, ctx: discord.commands.context.ApplicationContext,
                     amount: discord.Option(discord.SlashCommandOptionType.integer, "amount", required=True),
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=False)):

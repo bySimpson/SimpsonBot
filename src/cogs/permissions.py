@@ -58,7 +58,7 @@ class Permissions(commands.Cog):
         else:
             await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
 
-    @discord.slash_command(name="permissions", description="List permissions")
+    @discord.slash_command(name="permissions", description="List permissions!")
     async def permissions(self, ctx: discord.commands.context.ApplicationContext,
                        username: discord.Option(discord.SlashCommandOptionType.user, "username", required=False)):
         if ctx.author.guild_permissions.administrator or self.db.is_moderator(ctx.guild_id, ctx.author.id):

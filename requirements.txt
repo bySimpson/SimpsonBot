@@ -3,3 +3,4 @@ python-decouple~=3.5
 requests~=2.27.1
 pymongo~=3.12.3
 pymodm~=0.4.3
+betteruptime~=0.1.6
