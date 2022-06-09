@@ -44,7 +44,7 @@ class DB:
         self.__username = config("MONGODB_USERNAME", cast=str)
         self.__password = config("MONGODB_PASSWORD", cast=str)
         self.__hostname = config("MONGODB_URL", default="localhost", cast=str)
-        self.__document = config("MONGODB_DOCUMENT", default="orderservice", cast=str)
+        self.__document = config("MONGODB_DOCUMENT", default="SimpsonBot", cast=str)
         self.__connection_string = f"mongodb://{self.__username}:{self.__password}@{self.__hostname}/SimpsonBot?authSource=admin"
 
         connection.connect(self.__connection_string)

@@ -8,7 +8,8 @@ extensions = [
     "mention",
     "help",
     "permissions",
-    "reddit"
+    "reddit",
+    "status"
 ]
 
 def start_bot():
