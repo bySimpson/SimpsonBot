@@ -1,5 +1,5 @@
 # build container
-FROM python:3-alpine as builder
+FROM python:3.10-alpine as builder
 WORKDIR /usr/src/app
 
 RUN apk add --no-cache --update gcc libc-dev linux-headers alpine-sdk git && rm -rf /var/cache/apk/*
@@ -16,7 +16,7 @@ COPY requirements.txt ./
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # main container
-FROM python:3-alpine as runner
+FROM python:3.10-alpine as runner
 ENV PYTHONUNBUFFERED definitely
 ENV TZ Europe/Vienna
 WORKDIR /usr/src/app
