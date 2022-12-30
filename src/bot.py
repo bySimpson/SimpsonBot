@@ -10,6 +10,7 @@ extensions = [
     "logging",
     "mention",
     "permissions",
+    "randomGenerator",
     "reddit",
     "status",
     "version"
