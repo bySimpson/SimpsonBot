@@ -1,14 +1,15 @@
 from pymongo import TEXT
 from pymongo.operations import IndexModel
-from pymodm import connect, fields, MongoModel, EmbeddedMongoModel
+from bunnet import Document
+from pydantic import Field
 
 
-class Guild(MongoModel):
-    guild_id = fields.IntegerField(primary_key=True)
-    users = fields.EmbeddedDocumentListField("User")
+class User(Document):
+    id: int = Field(default_factory=int)
+    moderator: bool = False
+    administrator: bool = False
 
 
-class User(MongoModel):
-    user_id = fields.IntegerField(primary_key=True)
-    moderator = fields.BooleanField(default=False)
-    administrator = fields.BooleanField(default=False)
+class Guild(Document):
+    id: int = Field(default_factory=int)
+    users: list[User] = []

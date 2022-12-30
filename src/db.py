@@ -1,11 +1,11 @@
 from typing import Any
 
-from pymongo import TEXT
+from pymongo import MongoClient
 from pymongo.operations import IndexModel
-from pymodm import connection
 import json
 from src.models import *
 from decouple import config
+from bunnet import Document, Indexed, init_bunnet
 
 
 class Config:
@@ -45,30 +45,34 @@ class DB:
         self.__password = config("MONGODB_PASSWORD", cast=str)
         self.__hostname = config("MONGODB_URL", default="localhost", cast=str)
         self.__document = config("MONGODB_DOCUMENT", default="SimpsonBot", cast=str)
-        self.__connection_string = f"mongodb://{self.__username}:{self.__password}@{self.__hostname}/SimpsonBot?authSource=admin"
+        self.__connection_string = f"mongodb://{self.__username}:{self.__password}@{self.__hostname}:27017"
 
-        connection.connect(self.__connection_string)
+        self._client = MongoClient(self.__connection_string)
+
+        init_bunnet(database=self._client.get_database(name=self.__document), document_models=[Guild, User])
 
     def insert_guild(self, guild_id: int):
-        c_guild = Guild(guild_id=guild_id)
-        c_guild.save()
+        c_guild = Guild(id=guild_id)
+        c_guild.insert()
         return c_guild
 
     def get_guild_by_id(self, guild_id: int) -> Guild | None:
         try:
-            return Guild.objects.get({"_id": guild_id})
+            res = Guild.get(guild_id).run()
+            return res
         except Exception:
+            print("Except!")
             return None
 
     def update_or_add_user_to_guild(self, guild_id: int, user_id: int, user_object: User):
-        user_object.user_id = user_id
+        user_object.id = user_id
         guild = self.get_guild_by_id(guild_id)
         if not guild:
             guild = self.insert_guild(guild_id)
 
         found = False
         for i in range(0, len(guild.users)):
-            if guild.users[i].user_id == user_id:
+            if guild.users[i].id == user_id:
                 guild.users[i] = user_object
                 found = True
                 break
@@ -79,9 +83,10 @@ class DB:
 
     def get_user(self, guild_id: int, user_id: int) -> User | None:
         try:
-            guild = Guild.objects.get({"_id": guild_id, "users._id": user_id})
+            guild = Guild.find_one({"_id": guild_id, "users._id": user_id}).run()
+            print(guild)
             for user in guild.users:
-                if user.user_id == user_id:
+                if user.id == user_id:
                     return user
         except Exception:
             return None
@@ -107,7 +112,9 @@ class DB:
 if __name__ == "__main__":
     db = DB()
     #db.insert_guild(170834267721564160)
-    #db.get_guild_by_id(170834267721564160)
+    #guid = db.get_guild_by_id(170834267721564160)
+    #guid = db.insert_guild(170834267721564160)
+    #print(guid)
     #db.set_permissions_of_user(170834267721564160, 1)
-    db.update_or_add_user_to_guild(170834267721564160, 416678961079386142, User(administrator=True))
-    print(db.is_moderator(170834267721564160, 416678961079386142))
+    #db.update_or_add_user_to_guild(170834267721564160, 416678961079386142, User(administrator=True))
+    #print(db.is_moderator(170834267721564160, 416678961079386142))
