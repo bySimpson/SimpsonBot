@@ -4,6 +4,7 @@ from discord.ext import commands, tasks
 import betteruptime
 from decouple import config
 from src.db import DB
+import os
 
 
 class Status(commands.Cog):
@@ -62,7 +63,12 @@ class Status(commands.Cog):
 
     @tasks.loop(minutes=5)
     async def update_service_status(self):
-        requests.get("https://betteruptime.com/api/v1/heartbeat/MVLGr758LctjAWH1NqxijH6b")
+        url = config("BETTERUPTIME_HEARTBEAT_URL")
+        if url != "":
+            requests.get(url)
+        else:
+            print("BETTERUPTIME_HEARTBEAT_URL not set!")
+            os._exit(-1)
 
     @discord.slash_command(name="status", description="Get service status of all services!")
     async def service_status(self, ctx: discord.commands.context.ApplicationContext):
