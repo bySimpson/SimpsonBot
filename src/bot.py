@@ -1,11 +1,13 @@
 import discord
 import os  # default module
 from decouple import config
+from src.db import DB
 
 extensions = [
     "clear",
     "duck",
     "help",
+    "logging",
     "mention",
     "permissions",
     "reddit",
@@ -13,11 +15,13 @@ extensions = [
     "version"
 ]
 
+db = DB()
+
+bot = discord.Bot(intents=discord.Intents.all(),
+                  activity=discord.Activity(type=discord.ActivityType.playing, name="/help - by LordSimpson"))
+
 
 def start_bot():
-    bot = discord.Bot(intents=discord.Intents.all(),
-                      activity=discord.Activity(type=discord.ActivityType.playing, name="/help - by LordSimpson"))
-
     for cog in extensions:
         bot.load_extension(f"src.cogs.{cog}")
 

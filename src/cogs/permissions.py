@@ -2,13 +2,13 @@ import discord
 import requests
 from discord.ext import commands
 from src.models import User
-from src.db import DB
+from src.bot import db
 
 
 class Permissions(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
-        self.db = DB()
+        self.db = db
 
     @discord.slash_command(name="addmod", description="Add a Moderator!")
     async def addmod(self, ctx: discord.commands.context.ApplicationContext,
@@ -67,12 +67,30 @@ class Permissions(commands.Cog):
                 embed_.add_field(name="Moderator", value=self.db.is_moderator(ctx.guild_id, username.id))
                 embed_.add_field(name="Administrator", value=self.db.is_admin(ctx.guild_id, username.id))
                 # user-specific permissions
-                await ctx.respond(embed=embed_)
+                await ctx.respond(embed=embed_, ephemeral=True)
             else:
-                await ctx.respond(f"Not implemented yet!")
-                pass
+                embed_ = discord.Embed(title=f"Permissions list", color=0xb87328)
+                moderators = []
+                administrators = []
+                guild = self.db.get_guild_by_id(ctx.guild_id)
+                for c_user in guild.users:
+                    user_obj = await self.bot.fetch_user(c_user.id)
+                    name = f"<@{user_obj.id}>"
+                    if c_user.administrator:
+                        administrators.append(name)
+                    if c_user.moderator:
+                        moderators.append(name)
+                moderator_out = "None"
+                administrator_out = "None"
+                if len(moderators) != 0:
+                    moderator_out = "\n".join(moderators)
+                if len(administrators) != 0:
+                    administrator_out = "\n".join(administrators)
+                embed_.add_field(name="Moderators", value=moderator_out)
+                embed_.add_field(name="Administrators", value=administrator_out)
+                await ctx.respond(embed=embed_, ephemeral=True)
         else:
-            await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
+            await ctx.respond(f"Sorry, but you don't have enough permissions!", ephemeral=True)
 
 
 def setup(bot):

@@ -61,7 +61,6 @@ class DB:
             res = Guild.get(guild_id).run()
             return res
         except Exception:
-            print("Except!")
             return None
 
     def update_or_add_user_to_guild(self, guild_id: int, user_id: int, user_object: User):
