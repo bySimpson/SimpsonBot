@@ -9,7 +9,7 @@ class RandomGenerator(commands.Cog):
         self.bot = bot
 
     @discord.slash_command(name="coinflip", description="Flip a coin!")
-    async def help(self, ctx: discord.commands.context.ApplicationContext):
+    async def coinflip(self, ctx: discord.commands.context.ApplicationContext):
         number = random.randint(0, 1)
         if number == 1:
             output = "Head"
@@ -18,7 +18,7 @@ class RandomGenerator(commands.Cog):
         await ctx.respond(f"{output}")
 
     @discord.slash_command(name="random", description="Random number between x and y!")
-    async def help(self, ctx: discord.commands.context.ApplicationContext,
+    async def random_number(self, ctx: discord.commands.context.ApplicationContext,
                    from_: discord.Option(discord.SlashCommandOptionType.integer, "from", required=True),
                    to_: discord.Option(discord.SlashCommandOptionType.integer, "to", required=True)):
         if from_ > to_:
