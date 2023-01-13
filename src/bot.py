@@ -13,7 +13,8 @@ extensions = [
     "randomGenerator",
     "reddit",
     "status",
-    "version"
+    "version",
+    "user_info"
 ]
 
 db = DB()

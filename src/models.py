@@ -9,7 +9,6 @@ class User(Document):
     moderator: bool = False
     administrator: bool = False
 
-
 class Guild(Document):
     id: int = Field(default_factory=int)
     users: list[User] = []

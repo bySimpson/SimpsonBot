@@ -9,7 +9,7 @@ class Version(commands.Cog):
         self.bot = bot
 
     @discord.slash_command(name="version", description="Get current version of the bot!")
-    async def help(self, ctx: discord.commands.context.ApplicationContext):
+    async def version(self, ctx: discord.commands.context.ApplicationContext):
         version = config("VERSION", default="dev")
         if version == "%VER%":
             version = "0.0.0-dev"
