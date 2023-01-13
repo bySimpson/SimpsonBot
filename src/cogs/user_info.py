@@ -12,7 +12,7 @@ class UserInfo(commands.Cog):
     @discord.slash_command(name="info", description="Get information about a specific user!")
     async def user_info(self, ctx: discord.commands.context.ApplicationContext,
                         username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True)):
-        embed_ = discord.Embed(title=f"Information about: {username}", color=0xb87328, description="Desc")
+        embed_ = discord.Embed(title=f"Information about: {username}", color=0xb87328)
         embed_.set_thumbnail(url=username.display_avatar.url)
         embed_.add_field(name=f"ID", value=username.id, inline=True)
         embed_.add_field(name=f"Nickname", value=username.nick, inline=True)
