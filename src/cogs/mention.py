@@ -8,7 +8,7 @@ class Mention(commands.Cog):
         self.bot = bot
 
     @discord.slash_command(name="ping", description="Ping a user!")
-    async def clear(self, ctx: discord.commands.context.ApplicationContext,
+    async def ping(self, ctx: discord.commands.context.ApplicationContext,
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True),
                     amount: discord.Option(discord.SlashCommandOptionType.integer, "amount", required=False)):
         if amount:
