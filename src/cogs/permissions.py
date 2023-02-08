@@ -3,6 +3,7 @@ import requests
 from discord.ext import commands
 from src.models import User
 from src.bot import db
+from discord import guild_only
 
 
 class Permissions(commands.Cog):
@@ -10,6 +11,7 @@ class Permissions(commands.Cog):
         self.bot = bot
         self.db = db
 
+    @guild_only()
     @discord.slash_command(name="addmod", description="Add a Moderator!")
     async def addmod(self, ctx: discord.commands.context.ApplicationContext,
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True)):
@@ -22,6 +24,7 @@ class Permissions(commands.Cog):
         else:
             await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
 
+    @guild_only()
     @discord.slash_command(name="delmod", description="Remove a Moderator!")
     async def delmod(self, ctx: discord.commands.context.ApplicationContext,
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True)):
@@ -34,6 +37,7 @@ class Permissions(commands.Cog):
         else:
             await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
 
+    @guild_only()
     @discord.slash_command(name="addadmin", description="Add an Administrator!")
     async def addadmin(self, ctx: discord.commands.context.ApplicationContext,
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True)):
@@ -46,6 +50,7 @@ class Permissions(commands.Cog):
         else:
             await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
 
+    @guild_only()
     @discord.slash_command(name="deladmin", description="Remove an Administrator!")
     async def deladmin(self, ctx: discord.commands.context.ApplicationContext,
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True)):
@@ -58,6 +63,7 @@ class Permissions(commands.Cog):
         else:
             await ctx.respond(f"Sorry, but you don't have enough permissions!", delete_after=5)
 
+    @guild_only()
     @discord.slash_command(name="permissions", description="List permissions!")
     async def permissions(self, ctx: discord.commands.context.ApplicationContext,
                        username: discord.Option(discord.SlashCommandOptionType.user, "username", required=False)):

@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from src.models import User, Guild
 from src.db import DB
+from discord import guild_only
 
 
 class Clear(commands.Cog):
@@ -9,6 +10,7 @@ class Clear(commands.Cog):
         self.db = DB()
         self.bot = bot
 
+    @guild_only()
     @discord.slash_command(name="clear", description="Clear a set amount of messages!")
     async def clear(self, ctx: discord.commands.context.ApplicationContext,
                     amount: discord.Option(discord.SlashCommandOptionType.integer, "amount", required=True),

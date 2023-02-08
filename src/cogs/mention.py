@@ -1,12 +1,14 @@
 import discord
 from discord.ext import commands
 import time
+from discord import guild_only
 
 
 class Mention(commands.Cog):
     def __init__(self, bot: discord.Bot):
         self.bot = bot
 
+    @guild_only()
     @discord.slash_command(name="ping", description="Ping a user!")
     async def ping(self, ctx: discord.commands.context.ApplicationContext,
                     username: discord.Option(discord.SlashCommandOptionType.user, "username", required=True),
