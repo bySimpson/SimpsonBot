@@ -8,7 +8,7 @@ class Reddit(commands.Cog):
         self.bot = bot
 
     def get_meme_from_reddit(self, subreddit_name: str, show_title=True):
-        response = requests.get(f"https://meme-api.herokuapp.com/gimme/{subreddit_name}")
+        response = requests.get(f"https://meme-api.com/gimme/{subreddit_name}")
         if response.status_code == 200:
             json_response = response.json()
             if "url" in json_response and "title" in json_response:
