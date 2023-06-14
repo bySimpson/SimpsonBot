@@ -11,7 +11,7 @@ extensions = [
     "mention",
     "permissions",
     "randomGenerator",
-    "reddit",
+    #"reddit",
     "status",
     "version",
     "user_info"
