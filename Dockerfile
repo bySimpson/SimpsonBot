@@ -2,7 +2,7 @@
 FROM python:3.11-alpine as builder
 WORKDIR /usr/src/app
 
-RUN apk add --no-cache --update gcc libc-dev linux-headers alpine-sdk git && rm -rf /var/cache/apk/*
+RUN apk add --no-cache --update gcc libc-dev linux-headers curl alpine-sdk git && rm -rf /var/cache/apk/*
 
 COPY .git .
 COPY .env.template .
