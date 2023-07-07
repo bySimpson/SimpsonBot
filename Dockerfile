@@ -12,11 +12,8 @@ RUN sed -i "s/%VER%/$(git describe --always --abbrev | sed 's/-/./')/" .env
 RUN adduser -s /bin/bash -S service
 USER service
 
-# install rust
-RUN curl --proto '=https' --tlsv1.2 -sSf -y https://sh.rustup.rs | sh
-ENV PATH /home/service/.cargo/bin:$PATH
-
 COPY requirements.txt ./
+RUN pip3 install --no-cache-dir setuptools_rust 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # main container
