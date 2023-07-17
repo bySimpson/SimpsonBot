@@ -16,8 +16,8 @@ COPY requirements.txt ./
 RUN pip3 install --no-cache-dir setuptools_rust 
 
 # Get Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sed 's#/proc/self/exe#\/bin\/sh#g' | sh -s -- -y
-RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
+#RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sed 's#/proc/self/exe#\/bin\/sh#g' | sh -s -- -y
+#RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
