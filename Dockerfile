@@ -27,7 +27,7 @@ ENV PYTHONUNBUFFERED definitely
 ENV TZ Europe/Vienna
 WORKDIR /usr/src/app
 
-RUN adduser -s /bin/bash -S service && chown service:root /usr/src/app
+RUN adduser -s /bin/ash -S service && chown service:root /usr/src/app
 COPY --from=builder /home/service/.local/lib/python3.*/site-packages /home/service/.local/lib/python/site-packages
 RUN mkdir --parents  /home/service/.local/lib/python$(python --version | sed -e 's/[^0-9.]//g' | cut -f1,2 -d'.'); \
         mv /home/service/.local/lib/python/site-packages /home/service/.local/lib/python$(python --version | sed -e 's/[^0-9.]//g' | cut -f1,2 -d'.')/site-packages;\
