@@ -4,6 +4,6 @@ pydantic==1.10.10
 requests~=2.31.0
 pymongo==4.5.0
 betteruptime~=0.1.6
-bunnet~=1.1.0
+bunnet~=1.2.0
 coloredlogs~=15.0.1
 verboselogs~=1.7
