@@ -1,7 +1,7 @@
 py-cord==2.5.0
 python-decouple~=3.8
 pydantic==1.10.10
-requests~=2.31.0
+requests~=2.32.3
 pymongo==4.7.0
 betteruptime~=0.1.6
 bunnet~=1.3.0
