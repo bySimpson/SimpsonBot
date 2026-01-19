@@ -1,5 +1,5 @@
 # build container
-FROM python:3.15.0a2-alpine as builder
+FROM python:3.15.0a5-alpine as builder
 WORKDIR /usr/src/app
 
 RUN apk add --no-cache --update gcc gcc-arm-none-eabi libc-dev linux-headers curl gcc alpine-sdk git rust cargo && rm -rf /var/cache/apk/*
@@ -22,7 +22,7 @@ RUN pip3 install --no-cache-dir setuptools_rust
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # main container
-FROM python:3.15.0a2-alpine as runner
+FROM python:3.15.0a5-alpine as runner
 ENV PYTHONUNBUFFERED definitely
 ENV TZ Europe/Vienna
 WORKDIR /usr/src/app
